@@ -1104,6 +1104,7 @@ FAB_ADD_SECURITY_VIEWS = True
 FAB_ADD_SECURITY_PERMISSION_VIEW = False
 FAB_ADD_SECURITY_VIEW_MENU_VIEW = False
 FAB_ADD_SECURITY_PERMISSION_VIEWS_VIEW = False
+FAB_ADD_SECURITY_API = True
 
 # The link to a page containing common errors and their resolutions
 # It will be appended at the bottom of sql_lab errors.

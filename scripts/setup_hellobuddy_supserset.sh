@@ -18,8 +18,8 @@ sudo docker run hello-world
 sudo systemctl enable docker
 
 # From https://docs.docker.com/engine/install/linux-postinstall/
+sudo groupadd docker
 sudo usermod -aG docker $USER
-newgrp docker
 docker run hello-world
 
 cd superset

@@ -284,7 +284,7 @@ SCHEDULED_QUERIES: Dict[str, Any] = {}
 APP_NAME = "HelloBuddy Analytics"
 
 # Specify the App icon
-APP_ICON = "/static/assets/images/superset-logo-horiz.png"
+APP_ICON = "/static/assets/images/hellobuddy-logo-horiz.png"
 
 # Specify where clicking the logo would take the user
 # e.g. setting it to '/' would take the user to '/superset/welcome/'

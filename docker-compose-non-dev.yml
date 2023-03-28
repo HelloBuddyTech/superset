@@ -51,6 +51,9 @@ services:
       - 8088:8088
     depends_on: *superset-depends-on
     volumes: *superset-volumes
+    environment:
+      - SUPERSET_FEATURE_EMBEDDED_SUPERSET='true'
+      - HELLOBUDDY_SUPERSET_SHARED_SECRET=${HELLOBUDDY_SUPERSET_SHARED_SECRET}
 
   superset-init:
     image: *superset-image

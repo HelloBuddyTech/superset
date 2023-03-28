@@ -100,7 +100,7 @@ class CeleryConfig(object):
 
 CELERY_CONFIG = CeleryConfig
 
-FEATURE_FLAGS = {"ALERT_REPORTS": True}
+FEATURE_FLAGS = {"ALERT_REPORTS": True, "EMBEDDED_SUPERSET": True}
 ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"
 # The base URL for the email report hyperlinks.
@@ -121,3 +121,56 @@ try:
     )
 except ImportError:
     logger.info("Using default Docker config...")
+
+
+# Login via app.hellobuddy.tech
+
+
+from flask_appbuilder.security.views import expose
+from superset.security import SupersetSecurityManager
+from flask_appbuilder.security.manager import BaseSecurityManager
+from flask_appbuilder.security.manager import AUTH_REMOTE_USER
+from flask import  redirect, request, flash
+from flask_login import login_user
+
+import hashlib
+def compute_auth_token(email):
+    secret = get_env_variable("HELLOBUDDY_SUPERSET_SHARED_SECRET")
+    str = f'{secret}:{email}'
+    return hashlib.sha256(str.encode("utf-8")).hexdigest()
+
+# Create a custom view to authenticate the user
+AuthRemoteUserView=BaseSecurityManager.authremoteuserview
+class CustomAuthUserView(AuthRemoteUserView):
+    @expose('/login/')
+    def login(self):
+        email = request.args.get('email')
+        token = request.args.get('token')
+        expected_token = compute_auth_token(email)
+        next = request.args.get('next')
+        sm = self.appbuilder.sm
+        session = sm.get_session
+        user = session.query(sm.user_model).filter_by(email=email).first()
+        if (user is not None):
+            if token == expected_token:
+                login_user(user, remember=False, force=True)
+                if (next is not None):
+                    return redirect(next)
+                else:
+                    return redirect(self.appbuilder.get_url_for_index)
+            else:
+                #flash('Unable to auto login', 'warning')
+                return super(CustomAuthUserView,self).login()
+        else:
+          #flash("User does not exist", 'warning')
+          return super(CustomAuthUserView,self).login()
+
+# Create a custom Security manager that overrides the CustomAuthUserView
+class CustomSecurityManager(SupersetSecurityManager):
+    authremoteuserview = CustomAuthUserView
+
+# Use our custom authenticator
+CUSTOM_SECURITY_MANAGER = CustomSecurityManager
+
+# User remote authentication
+AUTH_TYPE = AUTH_REMOTE_USER

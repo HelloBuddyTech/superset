@@ -139,6 +139,12 @@ const plugins = [
     chunks: [],
     filename: '500.html',
   }),
+  new HtmlWebpackPlugin({
+    template: './src/assets/staticPages/logout.html',
+    inject: true,
+    chunks: [],
+    filename: 'logout.html',
+  }),
 ];
 
 if (!process.env.CI) {

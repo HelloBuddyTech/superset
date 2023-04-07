@@ -162,8 +162,9 @@ class CustomAuthUserView(AuthRemoteUserView):
                 #flash('Unable to auto login', 'warning')
                 return super(CustomAuthUserView,self).login()
         else:
-          #flash("User does not exist", 'warning')
-          return super(CustomAuthUserView,self).login()
+            #flash("User does not exist", 'warning')
+            #return super(CustomAuthUserView,self).login()
+            return redirect('/static/assets/logout.html')
 
 # Create a custom Security manager that overrides the CustomAuthUserView
 class CustomSecurityManager(SupersetSecurityManager):

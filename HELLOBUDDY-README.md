@@ -1,6 +1,8 @@
 # HelloBuddy Superset
 
-## Setup
+## Install and setup
+
+### Install Superset
 
 - Install Ubuntu Server 22
 - Create a sudoable user:
@@ -11,6 +13,11 @@ sudo adduser hbsuperset sudo
 - Re-log as `hbsuperset`
 ```
 sudo su hbsuperset
+cd
+```
+- Set `HELLOBUDDY_SUPERSET_SHARED_SECRET`. This value must be shared between Superset and HelloBuddy, so make sure to use the same value for the HelloBuddy app:
+```
+echo "HELLOBUDDY_SUPERSET_SHARED_SECRET=<the shared secret>" > superset/.superset_env
 ```
 - Create an SSH key:
 ```
@@ -42,65 +49,7 @@ docker run hello-world
 ./setup_hellobuddy_supserset.sh
 ```
 
-### Install Docker
-
-To install Docker:
-
-```
-```
-
-### Superset
-
-
-
-Deploy Superset:
-
-```
-# From https://superset.apache.org/docs/installation/installing-superset-using-docker-compose/
-git clone git@github.com:HelloBuddyTech/superset.git
-
-```
-
-### NGinx
-
-NGinx is used to provide an SSL connection.
-
-```
-sudo apt-get install -y nginx
-sudo nano /etc/nginx/sites-available/analytics.hellobuddy.tech
-```
-
-File this file with:
-
-```
-server {
-  listen 80;
-  listen [::]:80;
-
-  server_name analytics.hellobuddy.tech;
-
-  location / {
-    proxy_pass http://127.0.0.1:8088;
-  }
-}
-```
-
-Enable the site:
-
-```
-sudo ln -s /etc/nginx/sites-available/analytics.hellobuddy.tech /etc/nginx/sites-enabled/analytics.hellobuddy.tech
-sudo systemctl reload nginx
-```
-
-Configure SSL:
-
-```
-# From https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
-sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d analytics.hellobuddy.tech
-```
-
-## Finalize the setup
+### Setup Superset
 
 **Change the admin password!**
 
@@ -111,7 +60,7 @@ sudo certbot --nginx -d analytics.hellobuddy.tech
 - Choose a secured password
 
 Configure the database connection:
-- Go to https://app.planetscale.com/hellobuddy/hellobuddy, then Settings > Password
+- Go to https://app.planetscale.com/hellobuddy/hellobuddy/settings/passwords
 - Click "New password"
 - Type "analytics-hellobuddy-tech" as the name, select the "main" branch and "Read-only" the role, validate.
 - Note the credentials.
@@ -144,7 +93,21 @@ Create the data sets:
   - Timing
   - User
 
-# Create a Row Level Security (RLS) for an account
+## Update Superset
+
+Perform and push the required changes in https://github.com/HelloBuddyTech/superset.
+
+Then, connect to the hosting server:
+
+```
+cd superset
+git pull
+docker build -t hellobuddy-superset .
+docker-compose -f docker-compose-non-dev.yml down
+docker-compose -f docker-compose-non-dev.yml --env-file .superset_env up -d
+```
+
+## Create a Row Level Security (RLS) for an account
 
 To configure the RLS for an account, you need:
 - The account slug (eg. innoha)
@@ -153,33 +116,11 @@ To configure the RLS for an account, you need:
 - Go to https://analytics.hellobuddy.tech/, then Settings > Row Level Security
 - Click "+"
 - Fill the form:
-  - Name: the accoubt slug (eg. innoha)
+  - Name: the account slug (eg. innoha)
   - Filter type: Regular
   - Tables: Select **all** tables (they have been listed as datasets)
   - Clause: `companyAccountId='<the company account id>'`
 - Click "Save"
-
-## Run it
-
-```
-cd superset
-docker-compose -f docker-compose-non-dev.yml up
-```
-
-And visit http://192.168.56.104:8088/login/ (admin / admin)
-
-## Update Superset
-
-Perform the required changes in https://github.com/HelloBuddyTech/superset.
-
-Then, connect to the hosting server:
-
-```
-cd superset
-git pull
-docker build -t hellobuddy-superset .
-docker-compose -f docker-compose-non-dev.yml restart
-```
 
 ## OVH Virtual Machine
 
@@ -326,3 +267,8 @@ echo "gsheetsdb" >> ./docker/requirements-local.txt
 docker-compose build --force-rm
 docker-compose -f docker-compose-non-dev.yml up
 ```
+
+## Embed / SSO
+
+With AUTH_REMOTE_USER:
+https://www.tetranyde.com/blog/embedding-superset

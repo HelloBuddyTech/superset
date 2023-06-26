@@ -15,10 +15,6 @@ sudo adduser hbsuperset sudo
 sudo su hbsuperset
 cd
 ```
-- Set `HELLOBUDDY_SUPERSET_SHARED_SECRET`. This value must be shared between Superset and HelloBuddy, so make sure to use the same value for the HelloBuddy app:
-```
-echo "HELLOBUDDY_SUPERSET_SHARED_SECRET=<the shared secret>" > superset/.superset_env
-```
 - Create an SSH key:
 ```
 ssh-keygen
@@ -33,6 +29,10 @@ cat .ssh/id_rsa.pub
 - Get the code:
 ```
 git clone git@github.com:HelloBuddyTech/superset.git
+```
+- Set `HELLOBUDDY_SUPERSET_SHARED_SECRET`. This value must be shared between Superset and HelloBuddy, so make sure to use the same value for the HelloBuddy app:
+```
+echo "HELLOBUDDY_SUPERSET_SHARED_SECRET=<the shared secret>" > superset/.superset_env
 ```
 - Setup Docker:
 ```

@@ -40,8 +40,6 @@ from superset.databases.commands.importers.v1 import ImportDatabasesCommand
 from superset.databases.commands.tables import TablesDatabaseCommand
 from superset.databases.commands.test_connection import TestConnectionDatabaseCommand
 from superset.databases.commands.validate import ValidateDatabaseParametersCommand
-from superset.databases.schemas import DatabaseTestConnectionSchema
-from superset.databases.ssh_tunnel.models import SSHTunnel
 from superset.errors import ErrorLevel, SupersetError, SupersetErrorType
 from superset.exceptions import (
     SupersetErrorsException,

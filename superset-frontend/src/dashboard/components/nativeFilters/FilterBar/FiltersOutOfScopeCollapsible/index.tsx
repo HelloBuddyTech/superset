@@ -83,15 +83,7 @@ export const FiltersOutOfScopeCollapsible = ({
   >
     <AntdCollapse.Panel
       forceRender={forceRender}
-      header={
-        <span
-          css={(theme: SupersetTheme) => css`
-            font-size: ${theme.typography.sizes.s}px;
-          `}
-        >
-          {t('Filters out of scope (%d)', filtersOutOfScope.length)}
-        </span>
-      }
+      header={t('Filters out of scope (%d)', filtersOutOfScope.length)}
       key="1"
     >
       {filtersOutOfScope.map(renderer)}

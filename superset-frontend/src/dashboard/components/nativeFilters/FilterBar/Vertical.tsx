@@ -310,16 +310,89 @@ const VerticalFilterBar: React.FC<VerticalBarProps> = ({
               <Loading />
             </div>
           ) : isFeatureEnabled(FeatureFlag.DASHBOARD_NATIVE_FILTERS_SET) ? (
-            <>
-              {crossFilters}
-              {filterSetsTabs}
-            </>
+            <StyledTabs
+              centered
+              onChange={setTab as HandlerFunction}
+              defaultActiveKey={TabIds.AllFilters}
+              activeKey={editFilterSetId ? TabIds.AllFilters : undefined}
+            >
+              <AntdTabs.TabPane
+                tab={t('All filters (%(filterCount)d)', {
+                  filterCount: numberOfFilters,
+                })}
+                key={TabIds.AllFilters}
+                css={tabPaneStyle}
+              >
+                {editFilterSetId && (
+                  <EditSection
+                    dataMaskSelected={dataMaskSelected}
+                    disabled={!isDisabled}
+                    onCancel={() => setEditFilterSetId(null)}
+                    filterSetId={editFilterSetId}
+                  />
+                )}
+                {filterValues.length === 0 ? (
+                  <FilterBarEmptyStateContainer>
+                    <EmptyStateSmall
+                      title={t('No filters are currently added')}
+                      image="filter.svg"
+                      description={
+                        canEdit &&
+                        t(
+                          'Click the button above to add a filter to the dashboard',
+                        )
+                      }
+                    />
+                  </FilterBarEmptyStateContainer>
+                ) : (
+                  <FilterControlsWrapper>
+                    <FilterControls
+                      dataMaskSelected={dataMaskSelected}
+                      onFilterSelectionChange={onSelectionChange}
+                    />
+                  </FilterControlsWrapper>
+                )}
+              </AntdTabs.TabPane>
+              <AntdTabs.TabPane
+                disabled={!!editFilterSetId}
+                tab={t('Filter sets (%(filterSetCount)d)', {
+                  filterSetCount: filterSetFilterValues.length,
+                })}
+                key={TabIds.FilterSets}
+                css={tabPaneStyle}
+              >
+                <FilterSets
+                  onEditFilterSet={setEditFilterSetId}
+                  disabled={!isDisabled}
+                  dataMaskSelected={dataMaskSelected}
+                  tab={tab}
+                  onFilterSelectionChange={onSelectionChange}
+                />
+              </AntdTabs.TabPane>
+            </StyledTabs>
           ) : (
             <div css={tabPaneStyle} onScroll={onScroll}>
-              <>
-                {crossFilters}
-                {filterControls}
-              </>
+              {filterValues.length === 0 ? (
+                <FilterBarEmptyStateContainer>
+                  <EmptyStateSmall
+                    title={t('No filters are currently added')}
+                    image="filter.svg"
+                    description={
+                      canEdit &&
+                      t(
+                        'Click the button above to add a filter to the dashboard',
+                      )
+                    }
+                  />
+                </FilterBarEmptyStateContainer>
+              ) : (
+                <FilterControlsWrapper>
+                  <FilterControls
+                    dataMaskSelected={dataMaskSelected}
+                    onFilterSelectionChange={onSelectionChange}
+                  />
+                </FilterControlsWrapper>
+              )}
             </div>
           )}
           {actions}

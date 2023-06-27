@@ -27,21 +27,21 @@ import {
   usePrevious,
 } from '@superset-ui/core';
 import Icons from 'src/components/Icons';
+import { usePrevious } from 'src/hooks/usePrevious';
 import { setDirectPathToChild } from 'src/dashboard/actions/dashboardState';
-import Badge from 'src/components/Badge';
+import {
+  ChartsState,
+  DashboardInfo,
+  DashboardLayout,
+  RootState,
+} from 'src/dashboard/types';
 import DetailsPanelPopover from './DetailsPanel';
 import {
   Indicator,
   IndicatorStatus,
   selectIndicatorsForChart,
   selectNativeIndicatorsForChart,
-} from '../nativeFilters/selectors';
-import {
-  ChartsState,
-  DashboardInfo,
-  DashboardLayout,
-  RootState,
-} from '../../types';
+} from './selectors';
 
 export interface FiltersBadgeProps {
   chartId: number;

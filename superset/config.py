@@ -265,9 +265,9 @@ FLASK_USE_RELOAD = True
 PROFILING = False
 
 # Superset allows server-side python stacktraces to be surfaced to the
-# user when this feature is on. This may has security implications
+# user when this feature is on. This may have security implications
 # and it's more secure to turn it off in production settings.
-SHOW_STACKTRACE = True
+SHOW_STACKTRACE = False
 
 # Use all X-Forwarded headers when ENABLE_PROXY_FIX is True.
 # When proxying to a different port, set "x_port" to 0 to avoid downstream issues.
@@ -1303,9 +1303,8 @@ WEBDRIVER_AUTH_FUNC = None
 WEBDRIVER_CONFIGURATION: Dict[Any, Any] = {"service_log_path": "/dev/null"}
 
 # Additional args to be passed as arguments to the config object
-# Note: these options are Chrome-specific. For FF, these should
-# only include the "--headless" arg
-WEBDRIVER_OPTION_ARGS = ["--headless", "--marionette"]
+# Note: If using Chrome, you'll want to add the "--marionette" arg.
+WEBDRIVER_OPTION_ARGS = ["--headless"]
 
 # The base URL to query for accessing the user interface
 WEBDRIVER_BASEURL = "http://0.0.0.0:8080/"
@@ -1389,6 +1388,8 @@ RLS_FORM_QUERY_REL_FIELDS: Optional[Dict[str, List[List[Any]]]] = None
 SESSION_COOKIE_HTTPONLY = True  # Prevent cookie from being read by frontend JS?
 SESSION_COOKIE_SECURE = False  # Prevent cookie from being transmitted over non-tls?
 SESSION_COOKIE_SAMESITE: Optional[Literal["None", "Lax", "Strict"]] = "Lax"
+# Accepts None, "basic" and "strong", more details on: https://flask-login.readthedocs.io/en/latest/#session-protection
+SESSION_PROTECTION = "strong"
 
 # Cache static resources.
 SEND_FILE_MAX_AGE_DEFAULT = int(timedelta(days=365).total_seconds())
@@ -1586,7 +1587,7 @@ elif importlib.util.find_spec("superset_config") and not is_test():
     try:
         # pylint: disable=import-error,wildcard-import,unused-wildcard-import
         import superset_config
-        from superset_config import *  # type: ignore
+        from superset_config import *  # noqa
 
         print(f"Loaded your LOCAL configuration at [{superset_config.__file__}]")
     except Exception:

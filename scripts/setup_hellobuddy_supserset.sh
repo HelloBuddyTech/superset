@@ -23,4 +23,4 @@ echo "ERRORS ARE EXPECTED BELOW! Superset images pull fails: this is normal, bec
 docker-compose -f docker-compose-non-dev.yml pull
 echo "ERRORS ARE EXPECTED ABOVE! Superset images pull fails: this is normal, because they are available locally"
 
-docker-compose -f docker-compose-non-dev.yml up -d
+docker-compose -f docker-compose-non-dev.yml --env-file .superset_env up -d

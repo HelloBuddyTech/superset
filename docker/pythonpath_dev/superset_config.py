@@ -179,3 +179,10 @@ CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 
 # User remote authentication
 AUTH_TYPE = AUTH_REMOTE_USER
+
+# Languages/i18n
+BABEL_DEFAULT_LOCALE='fr'
+LANGUAGES = {
+    'en': {'flag': 'us', 'name': 'English'},
+    'fr': {'flag': 'fr', 'name': 'French'}
+}

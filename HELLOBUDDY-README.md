@@ -100,7 +100,8 @@ Perform and push the required changes in https://github.com/HelloBuddyTech/super
 Then, connect to the hosting server:
 
 ```
-cd superset
+sudo su hbsuperset
+cd ~/superset
 git pull
 docker build -t hellobuddy-superset .
 docker-compose -f docker-compose-non-dev.yml down

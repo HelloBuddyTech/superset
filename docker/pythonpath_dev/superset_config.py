@@ -186,3 +186,15 @@ LANGUAGES = {
     'en': {'flag': 'us', 'name': 'English'},
     'fr': {'flag': 'fr', 'name': 'French'}
 }
+
+EXTRA_CATEGORICAL_COLOR_SCHEMES = [{
+    "id": 'education',
+    "description": '',
+    "label": 'Education',
+    "isDefault": False,
+    "colors": [
+        '#4B4BB7', '#FF2E63', '#7FE5C0', '#FFE600',
+        '#242F6D', '#FF8DAE', '#00E536', '#FFB129',
+        '#242F6D', '#FF0000', '#01CC88', '#FFD899'
+    ]
+}]
